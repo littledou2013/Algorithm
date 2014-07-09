@@ -1,0 +1,50 @@
+Algorithm
+=========
+//使用关联数组map实现StringReorder
+#include <cstdio>
+#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+map<char,size_t> m;//使用关联数组保存字符和字符出现次数
+string s;
+int main(void)
+{
+	return 0;
+	while(getline(cin,s))
+	{
+		int size = s.size();
+		bool is_true = true;
+		for(int i = 0; i < size; ++i)
+		{
+			if((s[i] >= '0' && s[i] <= '9') || (s[i] >= 'a' && s[i] <= 'z'))
+			{
+				++m[s[i]];//关联数组查找关键字，关键字不存在则建立关键字并初始化元素值为0，存在则自增
+			}
+			else
+			{
+				is_true = false;
+			}
+		}
+		if(is_true)
+		{   
+			bool has_char = true;
+			while(has_char){
+				has_char = false;
+				for(map<char, size_t>::iterator iter = m.begin(); iter != m.end(); ++iter)
+				{
+					if(iter->second > 0){
+						printf("%c",iter->first);
+						--(iter->second);
+						has_char = true;
+					}
+				}
+			}
+		}
+		else
+			printf("<invalid input string>");
+		printf("\n");
+	}
+	return 0;
+}
