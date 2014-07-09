@@ -1,0 +1,51 @@
+//使用数组实现StringReorder
+#include <iostream>
+#include <cstdio>
+#include<memory>
+#include<string>
+using namespace std;
+
+int num[36];
+string s;
+int main(void)
+{
+	while(getline(cin,s)){//使用getline(),字符串中可能包含空格
+		memset(num,0,36*sizeof(int));
+		bool is_true = true;
+		int size = s.size();
+		for(int i = 0; i < size; ++i){
+			if(s[i] >= '0' && s[i] <= '9')
+			{
+				num[s[i]-'0']++;
+			}
+			else if(s[i] >= 'a' && s[i] <= 'z')
+			{
+				num[s[i] - 'a' + 10]++;
+			}else{
+				is_true = false;
+				break;
+			}
+		}
+		if(is_true == false)
+			puts("<invalid input string>");
+		else
+		{
+			bool need = true;
+			while(need){
+				need = false;
+				for(int i = 0; i < 36; ++i){
+					if(num[i]>0){
+						if(i <= 9 && i >= 0)
+							printf("%d",i);
+						else
+							printf("%c",'a'+i-10);
+						need = true;
+					}
+				}
+			}
+		}
+		printf("\n");
+
+	}
+	return 0;
+}
