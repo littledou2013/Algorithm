@@ -1,0 +1,59 @@
+//求第k个字符串，时间复杂度为n*K*(N+M)*(N+M),此方法非最佳
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <memory>
+using namespace std;
+bool nextPermutation(int num[], int length)
+{
+	for(int i = length - 2; i >= 0; --i)
+	{
+		if(num[i] < num[i+1])
+		{
+			int index = i + 1;
+			for(int j = i + 2; j < length; ++j)
+			{
+				if(num[j] > num[i] && num[j] <= num[index])
+				{
+					index = j;
+				}
+			}
+			swap(num[i],num[index]);
+			reverse(&num[i+1],&num[length-1]+1);
+			return true;
+		}
+	}
+	return false;
+}
+int main(void)
+{
+	int n;
+	int num[33];
+	int N,M,K;
+	scanf("%d",&n);
+	while(n--)
+	{
+		scanf("%d%d%d",&N,&M,&K);
+		memset(num,0,N * sizeof(int));
+		for(int i = N; i < N+M; i++)
+		{
+			num[i] = 1;
+		}
+		int length = M+N;
+		int is_true = true;
+		while(--K && is_true)
+		{
+			is_true = nextPermutation(num,length);
+		}
+		if(is_true)
+		{
+			for(int i = 0; i < length; ++i)
+				printf("%d",num[i]);
+		}
+		else
+			printf("Impossible");
+		printf("\n");
+	}
+	system("pause");
+	return 0;
+}
