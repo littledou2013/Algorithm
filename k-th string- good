@@ -1,0 +1,105 @@
+#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <map>
+using namespace std;
+//根据题目生成元素数组
+int prime[] = {2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97};
+int get_result(int n,int m)
+{
+	if(n<m)
+		swap(n,m);
+	//关联数组存储质因素-个数对
+	map<int, int> mp;
+	//(m+n)*(m+n-1)*……*1/(n*(n-1)*……*1*m*(m-1)*……*1)= (m*n)*……(n+1)/(m*……*1）
+	for(int i = n + 1; i <= m + n; ++i)
+	{
+		int tmp = i;
+		for(int j = 0; tmp > 1; ++j)
+		{
+			while(tmp % prime[j] == 0){
+				++mp[prime[j]];
+				tmp /= prime[j];
+			}
+		}
+	}
+	for(int i = 1; i <= m; i++)
+	{
+		int tmp = i;
+		for(int j = 0; tmp > 1; ++j)
+		{
+			while(tmp % prime[j] == 0){
+				--mp[prime[j]];
+				tmp /= prime[j];
+			}
+		}
+	}
+	long long ans = 1;
+	for(map<int,int>::iterator iter = mp.begin(); iter != mp.end(); ++iter)
+	{
+		while((iter->second)--){
+			ans *= iter->first;
+			//当ans大于int范围后直接返回INT_MAX
+			if(ans > INT_MAX)
+				return INT_MAX;
+		}
+	}
+	return static_cast<int>(ans);
+}
+//n个0，m个1
+void find_k(int n,int m,int k)
+{
+	int result = get_result(n,m);
+	if(result < k)
+	{
+		printf("Impossible\n");
+		return;
+	}
+	int index;
+	//求第k序列的核心代码
+	while(n > 0 || m > 0)
+	{
+		if(k == 1){
+			for(int i = 0; i < n; ++i)
+				printf("0");
+			for(int i = 0; i < m; ++i)
+				printf("1");
+			break;
+		}
+		result = get_result(n-1, m);
+		if(result > k)
+		{
+			printf("0");
+			--n;
+		}
+		else if(result < k)
+		{
+			printf("1");
+			--m;
+			k -= result;
+		}else{
+			printf("0");
+			--n;
+			while(m--)
+			{
+				printf("1");
+			}
+			while(n--)
+			{
+				printf("0");
+			}
+			break;
+		}
+	}
+	printf("\n");
+
+}
+
+int main(void)
+{
+	int N,M,K;
+	while(scanf("%d%d%d",&N,&M,&K)==3)
+		find_k(N,M,K);		
+
+	return 0;
+}
