@@ -1,0 +1,61 @@
+#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <memory>
+using namespace std;
+
+//求N个0和M个1组成的升序排列字符串的第K个。N,M>=2,2<=M+N<=33,K<=1000000000.
+
+//计算n个0和m个1的全排列数量
+unsigned long long get_result(int m, int n)
+{
+	unsigned long long result = 1;
+	if(m < n)
+	{
+		int tmp = m;
+		m = n;
+		n = tmp;
+	}
+	for(int i = m + 1; i <= m + n; ++i)
+		result *= i;
+	for(int i = 1; i <= n; ++i)
+		result /= i;
+	return result;
+}
+int main(void)
+{
+	int N,M,K;
+	int n;
+	int num[33];
+	scanf("%d",&n);
+	while(n--)
+	{
+		scanf("%d%d%d",&N,&M,&K);
+		unsigned long long number;
+		number = get_result(N,M);
+		if(number < K){
+			printf("Impossible\n");
+			continue;
+		}
+		int index;
+		for(int i = 0; i < N; ++i)//计算0-i为0的全排列
+		{
+			number = get_result(N-i-1,M);
+			if(number < K)
+			{
+				index = i;
+				break;
+			}
+		}
+		memset(num, 0, (index+1)*sizeof(int));
+		for(int i = index + 1; i < M + index + 1; ++i)
+			num[i] = 1;
+		memset(num + M + index + 1, 0, (N - index) * sizeof(int));
+		for(int i = number; i < K; i++)
+			next_permutation(num+index,num+M+N);
+		for(int i = 0; i < M + N; ++i)
+			printf("%d",num[i]);
+		printf("\n");
+	}
+	return 0;
+}
