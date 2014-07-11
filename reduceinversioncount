@@ -45,7 +45,6 @@ int main(void)
 					if(dp[i] > dp[j]){
 						//i,j位置交换会使逆序数减1
 						discrease = 1;
-						int mid_number = 0;
 						for(int k = i + 1; k < j; ++k)
 						{
 							/*
@@ -61,6 +60,16 @@ int main(void)
 								--discrease;
 							else if(dp[k] < dp[i])
 								++discrease;
+						/*
+							同样计算discrease
+							if(dp[k] < dp[i] && dp[k] > dp[j])
+								discrease += 2;
+							else if(dp[k] == dp[i])
+								discrease += 1;
+							else if(dp[k] == dp[j])
+								discrease += 1;
+						*/
+
 						}
 						if(discrease > max)
 							max = discrease;
