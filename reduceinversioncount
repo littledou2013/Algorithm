@@ -1,0 +1,74 @@
+#include <iostream>
+#include <cstdio>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+/*
+	在一个数列中选择两个数，交换他们的顺序使得逆序数变得最小，给出这个逆序数值。
+	逆序定义：对于数组A[0],A[1],A[2]……,如果i < j和A[i] > A[j]，则（i,j）为逆序。
+*/
+
+int main(void)
+{
+	string str;
+	while(true)
+	{	
+		vector<int> dp;//存放数列
+		do
+		{
+			int d;
+			scanf("%d",&d);
+			dp.push_back(d);
+		}while(getchar()!='\n');
+		int result = 0;
+		for(int i = dp.size() - 1; i > 0; --i)
+		{
+			for(int j = i - 1; j >= 0; --j)
+				if(dp[j] > dp[i])
+					++result;
+		}
+		if(result == 0)
+		{
+			printf("0\n");
+			continue;
+		}
+		else
+		{
+			int max = 0;
+			int discrease;
+			for(int i = 0; i < dp.size(); ++i)
+			{
+				for(int j = i+1; j < dp.size(); ++j)
+				{
+					if(dp[i] > dp[j]){
+						//i,j位置交换会使逆序数减1
+						discrease = 1;
+						int mid_number = 0;
+						for(int k = i + 1; k < j; ++k)
+						{
+							/*
+								k和j位置的大小关系分为两种情况：
+								1、dp[k] > dp[j]，在k后面的j和i交换后，将使dp[k]和dp[j]成为逆序对。
+								2、dp[k] < dp[j]，在k后面的j和i交换后，dp[k]和dp[j]将不再为逆序对。
+							*/
+							if(dp[k] > dp[j])
+								++discrease;
+							else if(dp[k] < dp[j])
+								--discrease;
+							if(dp[k] > dp[i])
+								--discrease;
+							else if(dp[k] < dp[i])
+								++discrease;
+						}
+						if(discrease > max)
+							max = discrease;
+					}
+				}
+			}
+			printf("%d\n",result - max);
+		}
+	}
+	return 0;
+}
