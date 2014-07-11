@@ -1,0 +1,71 @@
+#include <cstdio>
+#include <string>
+#include <iostream>
+#include <vector>
+using namespace std;
+/*
+	给出1到n的n个不重复的数字，找出它们组合的第k大序列
+
+*/
+void find_k_from_1toN(int n,int k)
+{	//n的范围有限制，当n的阶层超过整数范围后，需扩大数据范围
+	int result = 1;
+	for(int i = 2; i <= n; ++i)
+	{
+		result *= i;
+	}
+	if(result < k)
+	{
+		printf("Impossible");
+		return;
+	}
+	vector<int> dp(n,0);
+	for(int i = 0; i < n; ++i)
+	{
+		dp[i] = i + 1;
+	}
+	while(n > 0)
+	{
+		result /= n;
+		int size = dp.size();
+		for(int i = 0; i < size; i++)
+		{
+			if(result > k)
+			{
+				printf("%d",dp[i]);
+				dp.erase(dp.begin()+i);
+				n--;
+				break;
+			}
+			else if(result < k)
+			{
+				k -= result;
+			}
+			else
+			{
+				printf("%d",dp[i]);
+				dp.erase(dp.begin()+i);
+				for(int i = dp.size() - 1; i >= 0; --i)
+				{
+					printf("%d",dp[i]);
+				}
+				n = 0;
+				break;
+			}
+		}
+
+	}
+	printf("\n");
+		
+}
+
+int main()
+{
+	int n,k;
+	while(scanf("%d%d",&n,&k))
+	{
+		find_k_from_1toN(n,k);
+		printf("\n");
+	}
+	return 0;
+}
